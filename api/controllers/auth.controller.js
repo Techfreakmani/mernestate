@@ -43,6 +43,7 @@ export const signin = async (req,res,next) =>{
          const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET)
          //rest and ._doc means all the things expect the password
          const {password:pass, ...rest} = validUser._doc;
+         //access_token is the name of the cookie
          res
          .cookie('access_token', token, { httpOnly:true })
          .status(200)
