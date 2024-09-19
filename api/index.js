@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';
@@ -16,6 +17,8 @@ mongoose
 
 
 const app = express();
+
+app.use(cors());
 
 //allows to use json on the server
 app.use(express.json());
