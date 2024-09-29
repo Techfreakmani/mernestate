@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
+import { useSelector } from 'react-redux';
 import {
     FaBath,
     FaBed,
@@ -13,7 +14,7 @@ import {
     FaParking,
     FaShare,
   } from 'react-icons/fa';
-
+import Contact from '../components/Contact';
 
 
 export default function Listing() {
@@ -22,6 +23,8 @@ export default function Listing() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
+  const {currentUser} = useSelector((state) => state.user);
   const params = useParams();
   useEffect(() => {
     const fetchListing = async () => {
@@ -44,7 +47,6 @@ export default function Listing() {
     };
     fetchListing();
   }, [params.listingId]);
-  console.log(loading);
   return (
     <main>
       {loading && <p className='text-center my-7 text-2xl'>Loading...</p>}
@@ -85,7 +87,7 @@ export default function Listing() {
           )}
           <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
             <p className='text-2xl font-semibold'>
-              {listing.name} - ${' '}
+              {listing.name} - Rs{' '}
               {listing.offer
                 ? listing.discountPrice.toLocaleString('en-US')
                 : listing.regularPrice.toLocaleString('en-US')}
@@ -131,6 +133,16 @@ export default function Listing() {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+
+
+            {currentUser && listing.userRef !== currentUser._id && !contact && (
+              <button onClick={()=>setContact(true)} className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'>
+                Contact landlord
+              </button>
+            )}
+            {contact && <Contact listing={listing}/>}
+
+
           </div>
         </div>
       )}
